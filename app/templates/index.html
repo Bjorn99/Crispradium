@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRISPR Tool</title>
+    <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-200">
+    <div class="container mx-auto py-8">
+        <h1 class="text-3xl font-bold mb-4 text-center">CRISPR Guide RNA Designer</h1>
+        
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
+            <form method="POST" class="mb-6">
+                <label for="sequence" class="block font-medium mb-2">Enter DNA Sequence:</label>
+                <textarea id="sequence" name="sequence" rows="4" class="bg-gray-700 text-gray-200 rounded-md p-2 w-full" required></textarea>
+                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md mt-4">
+                    Find Guide RNAs
+                </button>
+            </form>
+            
+            {% if guide_rnas %}
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Position</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Strand</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">PAM</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Guide RNA</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Score</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Off-Target Sites</th>
+                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Off-Target Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for guide_rna in guide_rnas %}
+                        <tr class="border-b border-gray-700">
+                            <td class="px-4 py-2">{{ guide_rna.position }}</td>
+                            <td class="px-4 py-2">{{ guide_rna.strand }}</td>
+                            <td class="px-4 py-2">{{ guide_rna.pam_sequence }}</td>
+                            <td class="px-4 py-2">{{ guide_rna.guide_sequence }}</td>
+                            <td class="px-4 py-2">{{ guide_rna.score|round(2) }}</td>
+                            <td class="px-4 py-2">
+                                {% if guide_rna.off_target_sites %}
+                                <ul>
+                                    {% for site in guide_rna.off_target_sites %}
+                                    <li>{{ site }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% else %}
+                                None
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-2">{{ guide_rna.off_target_score|round(2) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
