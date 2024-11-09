@@ -3,62 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRISPR Tool</title>
+    <title>Crispradium</title>
     <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-900 text-gray-200">
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold mb-4 text-center">CRISPR Guide RNA Designer</h1>
+        <h1 class="text-3xl font-bold mb-4 text-center">Crispradium</h1>
         
         <div class="bg-gray-800 rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
             <form method="POST" class="mb-6">
-                <label for="sequence" class="block font-medium mb-2">Enter DNA Sequence:</label>
+                <label for="sequence" class="block font-mono font-medium mb-2">Enter DNA Sequence:</label>
                 <textarea id="sequence" name="sequence" rows="4" class="bg-gray-700 text-gray-200 rounded-md p-2 w-full" required></textarea>
-                <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md mt-4">
-                    Find Guide RNAs
-                </button>
+                <a href="#_" onclick="this.closest('form').submit();" class="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-mono font-medium tracking-tighter text-white bg-gray-800 rounded-lg group mt-4">
+                    <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-green-500 rounded-full group-hover:w-56 group-hover:h-56"></span>
+                    <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700"></span>
+                    <span class="relative">Find Guide RNAs</span>
+                </a>
             </form>
             
             {% if guide_rnas %}
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Position</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Strand</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">PAM</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Guide RNA</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Score</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Off-Target Sites</th>
-                            <th class="px-4 py-2 bg-gray-700 font-medium text-left">Off-Target Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for guide_rna in guide_rnas %}
-                        <tr class="border-b border-gray-700">
-                            <td class="px-4 py-2">{{ guide_rna.position }}</td>
-                            <td class="px-4 py-2">{{ guide_rna.strand }}</td>
-                            <td class="px-4 py-2">{{ guide_rna.pam_sequence }}</td>
-                            <td class="px-4 py-2">{{ guide_rna.guide_sequence }}</td>
-                            <td class="px-4 py-2">{{ guide_rna.score|round(2) }}</td>
-                            <td class="px-4 py-2">
-                                {% if guide_rna.off_target_sites %}
-                                <ul>
-                                    {% for site in guide_rna.off_target_sites %}
-                                    <li>{{ site }}</li>
-                                    {% endfor %}
-                                </ul>
-                                {% else %}
-                                None
-                                {% endif %}
-                            </td>
-                            <td class="px-4 py-2">{{ guide_rna.off_target_score|round(2) }}</td>
-                        </tr>
+<div class="overflow-x-auto">
+    <table class="min-w-full border-collapse border border-gray-700">
+        <thead>
+            <tr class="bg-gray-800 text-gray-200">
+                <th class="px-4 py-2 border border-gray-600">Position</th>
+                <th class="px-4 py-2 border border-gray-600">Strand</th>
+                <th class="px-4 py-2 border border-gray-600">PAM</th>
+                <th class="px-4 py-2 border border-gray-600">Guide RNA</th>
+                <th class="px-4 py-2 border border-gray-600">Score</th>
+                <th class="px-4 py-2 border border-gray-600">Off-Target Sites</th>
+                <th class="px-4 py-2 border border-gray-600">Off-Target Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for guide_rna in guide_rnas %}
+            <tr class="text-center bg-gray-700 text-gray-200 hover:bg-green-800 transition duration-300 ease-in-out">
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.position }}</td>
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.strand }}</td>
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.pam_sequence }}</td>
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.guide_sequence }}</td>
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.score|round(2) }}</td>
+                <td class="px-4 py-2 border border-gray-600">
+                    {% if guide_rna.off_target_sites %}
+                    <ul>
+                        {% for site in guide_rna.off_target_sites %}
+                        <li>{{ site }}</li>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% endif %}
+                    </ul>
+                    {% else %}
+                    None
+                    {% endif %}
+                </td>
+                <td class="px-4 py-2 border border-gray-600">{{ guide_rna.off_target_score|round(2) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
         </div>
     </div>
 </body>

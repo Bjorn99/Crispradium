@@ -14,6 +14,10 @@ class SequenceHandler:
         self.valid_bases = set(['A', 'T', 'G', 'C', 'N'])
         self.complementary_bases = {'A': 'T', 'T': 'A', 'G': 'C', 'C': 'G', 'N': 'N'}
         self.max_off_target_score = 4  # Maximum allowed off-target score
+
+    def clean_sequence(self, sequence: str) -> str:
+        """Remove whitespace and convert to uppercase."""
+        return ''.join(sequence.strip().split()).upper()
         
     def validate_sequence(self, sequence: str) -> bool:
         
@@ -193,8 +197,7 @@ class SequenceHandler:
         reverse_sequence = self.get_reverse_complement(sequence)
         for i in range(len(reverse_sequence) - len(guide_sequence) + 1):
             off_target_site = reverse_sequence[i:i+len(guide_sequence)]
-            if self.count_mismatches(guide_sequence, off_target_site) <= 3:
-                off_target_sites.append(off_target_site)
+            if self.count_mismatches(guide_sequence, off_target_site) <= 3 and off_target_site != guide_sequence: off_target_sites.append(off_target_site)
         
         return off_target_sites
     
