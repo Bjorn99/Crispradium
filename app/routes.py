@@ -1,37 +1,38 @@
-from flask import render_template, request
-from app import app
-from app.sequence_handler import SequenceHandler
+from flask import render_template, request, jsonify
+from app import app, sequence_handler, guide_rna_analyzer
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def index():
-    guide_rnas = []
-    if request.method == 'POST':
-        sequence = request.form['sequence']
-        sequence_handler = SequenceHandler()
-        
-        #clean the input sequence
-        cleaned_sequence = sequence_handler.clean_sequence(sequence)
-
-        # Debugging line to print the cleaned sequence
-        print(f"Cleaned Sequence: {cleaned_sequence}")  # This will output the cleaned sequence to the console
-
-        # Validate cleaned sequence
-        if not sequence_handler.validate_sequence(cleaned_sequence):
-            return render_template('index.html', error="Invalid DNA sequence.")
-
-
-        # Find PAM sites
-        pam_sites = sequence_handler.find_pam_sites(cleaned_sequence)
-        
-        # Score guide RNAs
-        #guide_rnas = []
-        for pam_site in pam_sites:
-            score = sequence_handler.score_guide_rna(pam_site['guide_sequence'], cleaned_sequence)
-            pam_site['score'] = score
-            pam_site['off_target_sites'] = sequence_handler.find_off_target_sites(pam_site['guide_sequence'], cleaned_sequence)
-            pam_site['off_target_score'] = sequence_handler.calculate_off_target_score(pam_site['guide_sequence'], cleaned_sequence)
-            guide_rnas.append(pam_site)
-        
-        return render_template('index.html', guide_rnas=guide_rnas)
-    
     return render_template('index.html')
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    """Analyze DNA sequence endpoint."""
+    data = request.get_json()
+    sequence = data.get('sequence', '').upper()
+    system = data.get('system', 'SpCas9')
+    
+    if not sequence_handler.validate_sequence(sequence):
+        return jsonify({
+            'error': 'Invalid DNA sequence. Please use only A, T, G, C, or N.'
+        }), 400
+    
+    cleaned_sequence = sequence_handler.clean_sequence(sequence)
+    
+    try:
+        results = guide_rna_analyzer.analyze_sequence(cleaned_sequence, system)
+        return jsonify({
+            'success': True,
+            'data': results
+        })
+    except Exception as e:
+        return jsonify({
+            'error': str(e)
+        }), 500
+
+@app.route('/systems', methods=['GET'])
+def get_systems():
+    """Get available CRISPR systems."""
+    return jsonify({
+        'systems': guide_rna_analyzer.crispr_systems
+    })

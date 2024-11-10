@@ -1,14 +1,13 @@
-from flask import Flask, render_template, request
+from flask import Flask
 from app.sequence_handler import SequenceHandler
+from app.guide_rna_analyzer import GuideRNAAnalyzer
 import os
 
-
 app = Flask(__name__)
-#app.config.from_object('config')
-# Configure the application with environment variables
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'your_default_secret_key')  # Fallback to a default if not set
-app.config['DATABASE_URL'] = os.getenv('DATABASE_URL', 'sqlite:///default.db')  # Default SQLite database
-app.config['API_KEY'] = os.getenv('API_KEY', 'your_default_api_key')  # Fallback for API key
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev_secret_key')
 
+# Initialize core services
+sequence_handler = SequenceHandler()
+guide_rna_analyzer = GuideRNAAnalyzer()
 
 from app import routes
