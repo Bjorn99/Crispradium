@@ -371,16 +371,16 @@ Due to the size of dependencies (especially ViennaRNA) and computational require
 ## References & Further Reading
 
 1. **Jinek, M., et al. (2012).** A programmable dual-RNA–guided DNA endonuclease in adaptive bacterial immunity. *Science*, 337(6096), 816-821. [Link to paper](https://www.science.org/doi/10.1126/science.1225829)  
-   *The paper that started it all.*
+   > *The paper that started it all.*
 
 2. **Ran, F.A., et al. (2015).** In vivo genome editing using Staphylococcus aureus Cas9. *Nature*, 520(7546), 186-191. [Link to paper](https://doi.org/10.1038/nature14299)  
-   *Proving that sometimes smaller is better.*
+   > *Proving that sometimes smaller is better.*
 
 3. **Zetsche, B., et al. (2015).** Cpf1 is a single RNA-guided endonuclease of a class 2 CRISPR-Cas system. *Cell*, 163(3), 759-771. [Link to paper](https://doi.org/10.1016/j.cell.2015.09.038)  
-   *Introducing the AT-sequence loving member of the CRISPR family.*
+   > *Introducing the AT-sequence loving member of the CRISPR family.*
 
 4. **Walton, R.T., et al. (2020).** Unconstrained genome targeting with near-PAMless engineered CRISPR-Cas9 variants. *Science*, 368(6488), 290-296. [Link to paper](https://www.science.org/doi/10.1126/science.aaz7031)  
-   *The "I don't care what's for dinner" variant of Cas9.*
+   > *The "I don't care what's for dinner" variant of Cas9.*
 
 ## Advanced Reading for the Curious
 
