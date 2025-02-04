@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "crispradium"
-version = "1.0.0"
+version = "1.0.1"
 description = "A web application that helps researchers design optimal CRISPR guide RNA sequences. It analyzes input DNA, identifies potential target sites, and scores the guide RNAs based on factors like GC content, secondary structure, and off-target potential."
 authors = ["Bjorn99 <67769176+Bjorn99@users.noreply.github.com>"]
 license = "MIT"
@@ -24,6 +24,7 @@ viennarna = "^2.7.0"
 rna = "^0.13.2"
 pandas = "^2.2.3"
 python-dotenv = "^1.0.1"
+gunicorn = "^23.0.0"
 
 
 [build-system]
