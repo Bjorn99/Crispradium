@@ -8,17 +8,63 @@ class GuideRNAAnalyzer:
             'SpCas9': {
                 'pam_sequence': 'NGG',
                 'guide_length': 20,
-                'description': 'Streptococcus pyogenes Cas9'
+                'description': 'Streptococcus pyogenes Cas9',
+                'citation': 'Jinek et al., Science (2012)',
+                'efficiency_weight': 1.0
+            },
+            'SaCas9': {
+                'pam_sequence': 'NNGRRT',
+                'guide_length': 21,
+                'description': 'Staphylococcus aureus Cas9',
+                'citation': 'Ran et al., Nature (2015)',
+                'efficiency_weight': 0.9,
+                'notes': 'Smaller size, good for AAV delivery'
             },
             'Cas12a': {
                 'pam_sequence': 'TTTV',
                 'guide_length': 23,
-                'description': 'Cpf1, cuts with 5′ overhang'
+                'description': 'Cpf1, cuts with 5′ overhang',
+                'citation': 'Zetsche et al., Cell (2015)',
+                'efficiency_weight': 0.95
+            },
+            'enAsCas12a': {
+                'pam_sequence': 'TTTN',
+                'guide_length': 23,
+                'description': 'Enhanced Acidaminococcus Cas12a',
+                'citation': 'Kleinstiver et al., Nature Biotech (2019)',
+                'efficiency_weight': 0.98
+            },
+            'xCas9': {
+                'pam_sequence': 'NG',
+                'guide_length': 20,
+                'description': 'PAM-flexible SpCas9 variant',
+                'citation': 'Hu et al., Nature (2018)',
+                'efficiency_weight': 0.85,
+                'notes': 'Broader PAM recognition, lower activity'
+            },
+            'Cas9-NG': {
+                'pam_sequence': 'NG',
+                'guide_length': 20,
+                'description': 'SpCas9 variant for NG PAM',
+                'citation': 'Nishimasu et al., Science (2018)',
+                'efficiency_weight': 0.88,
+                'notes': 'Engineered for NG PAM recognition'
+            },
+            'SpRY': {
+                'pam_sequence': 'NRN',
+                'guide_length': 20,
+                'description': 'SpCas9 variant with minimal PAM',
+                'citation': 'Walton et al., Science (2020)',
+                'efficiency_weight': 0.82,
+                'notes': 'Near-PAMless SpCas9, lower activity'
             }
         }
 
     def analyze_sequence(self, sequence: str, system: str = 'SpCas9') -> Dict[str, Any]:
         """Analyze sequence and find potential guide RNAs."""
+        if system not in self.crispr_systems:
+            raise ValueError(f"Unsupported CRISPR system: {system}")
+            
         cache_key = f"{sequence}_{system}"
         if cache_key in self.cache:
             return self.cache[cache_key]
@@ -28,7 +74,8 @@ class GuideRNAAnalyzer:
         results = {
             'guides': guides,
             'statistics': self.calculate_statistics(guides),
-            'visualization_data': self.prepare_visualization_data(guides)
+            'visualization_data': self.prepare_visualization_data(guides),
+            'system_info': self.crispr_systems[system]
         }
         
         self.cache[cache_key] = results
@@ -40,23 +87,47 @@ class GuideRNAAnalyzer:
         system_info = self.crispr_systems[system]
         pam_seq = system_info['pam_sequence']
         guide_length = system_info['guide_length']
+        efficiency_weight = system_info['efficiency_weight']
         
-        pam_pattern = pam_seq.replace('N', '[ATGC]').replace('V', '[ACG]')
+        # Convert IUPAC codes to regex patterns
+        pam_pattern = self._convert_pam_to_regex(pam_seq)
         
         for i in range(len(sequence) - guide_length - len(pam_seq)):
             potential_pam = sequence[i + guide_length:i + guide_length + len(pam_seq)]
             if self._matches_pam(potential_pam, pam_pattern):
                 guide = sequence[i:i + guide_length]
-                guides.append({
+                guide_data = {
                     'sequence': guide,
                     'position': i,
                     'pam': potential_pam,
                     'gc_content': self.calculate_gc_content(guide),
                     'structure_score': self.calculate_structure_score(guide),
-                    'efficiency_score': self.calculate_efficiency(guide)
-                })
+                }
+                # Apply system-specific efficiency weight
+                guide_data['efficiency_score'] = self.calculate_efficiency(guide) * efficiency_weight
+                guides.append(guide_data)
         
         return guides
+
+    def _convert_pam_to_regex(self, pam: str) -> str:
+        """
+        Convert IUPAC nucleotide codes to regex patterns.
+        Support for more PAM sequences.
+        """
+        iupac_map = {
+            'N': '[ATGC]',
+            'R': '[AG]',
+            'Y': '[CT]',
+            'M': '[AC]',
+            'K': '[GT]',
+            'S': '[GC]',
+            'W': '[AT]',
+            'H': '[ACT]',
+            'B': '[CGT]',
+            'V': '[ACG]',
+            'D': '[AGT]'
+        }
+        return ''.join(iupac_map.get(c, c) for c in pam)
     
     def _matches_pam(self, sequence: str, pattern: str) -> bool:
         """Check if sequence matches PAM pattern."""
