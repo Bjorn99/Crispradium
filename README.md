@@ -369,9 +369,6 @@ Due to the size of dependencies (especially ViennaRNA) and computational require
    - Optional feature packaging
 
 ## References & Further Reading
----
-
-## References & Further Reading
 
 1. **Jinek, M., et al. (2012).** A programmable dual-RNA–guided DNA endonuclease in adaptive bacterial immunity. *Science*, 337(6096), 816-821. [Link to paper](https://www.science.org/doi/10.1126/science.1225829)  
    *The paper that started it all.*
@@ -385,7 +382,6 @@ Due to the size of dependencies (especially ViennaRNA) and computational require
 4. **Walton, R.T., et al. (2020).** Unconstrained genome targeting with near-PAMless engineered CRISPR-Cas9 variants. *Science*, 368(6488), 290-296. [Link to paper](https://www.science.org/doi/10.1126/science.aaz7031)  
    *The "I don't care what's for dinner" variant of Cas9.*
 
----
 ## Advanced Reading for the Curious
 
 - ViennaRNA Package (Because RNA structure prediction is like weather forecasting for molecules)
