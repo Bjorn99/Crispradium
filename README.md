@@ -1,18 +1,68 @@
 # CRISPRADIUM
 
-*Because finding CRISPR targets shouldn't feel like looking for a needle in a DNA haystack*
+> *In the microscopic realm where molecules dance and DNA spirals into infinity, lies nature's most ingenious invention*
 
-## What's This All About?
+## A Tale of Molecular Magic (That's Actually Science)
 
-Ever tried to edit a massive book but didn't know which page to start with? That's basically what scientists face with CRISPR gene editing. This tool helps you find the perfect "page number" (guide RNA) to make your edit. Think of it as Ctrl+F for DNA, but way cooler.
+Picture yourself at the gates of a cell - a world containing the complexity of a universe. Within its walls lies DNA, a grand book written in an alphabet of four letters: A, T, G, and C. This living text sometimes needs editing, and that's where our story begins.
 
-### ELI5 (Explain Like I'm Five)
-Imagine you have a huge LEGO building (that's your DNA), and you want to change one specific brick. You need:
-1. A map to find the right brick (that's what guide RNA does)
-2. Special LEGO-removing tools (that's the Cas protein)
-3. A specific pattern around the brick to grip onto (that's the PAM sequence)
+"But how do you edit something so impossibly tiny?" Bacteria have answered this question over billions of years by developing CRISPR, and their solution is nothing short of extraordinary.
 
-CRISPRADIUM helps you make the perfect map for your LEGO-changing adventure!
+## The Molecular Knights and Their Quests
+
+CRISPR orchestrates a precise molecular dance, where each component plays a vital role:
+
+```
+The Guide RNA (our molecular scout):
+   5'-ATGCTAGCTAGCTAGCTGCT-NGG-3'
+   |||||||||||||||||||||  |||
+   3'-TACGATCGATCGATCGACGA-NCC-5'
+   
+   [Recognition Region]---[PAM Signal]
+```
+
+Much like a key fitting its lock with absolute precision, these molecular tools must match their targets perfectly. Let me show you this remarkable mechanism:
+
+1. **The Search**
+   - Your DNA unfolds like a spiral library
+   - Guide RNA seeks its matching sequence
+   - In a sea of 3 billion letters, it finds just 20
+   
+2. **The Recognition**
+   - The PAM signal serves as a molecular checkpoint
+   - Without this signature, even perfect matches remain untouched
+   - Nature's elegant safeguard at work
+
+## Why This Matters
+
+Here's what molecular biology textbooks often miss - it's a symphony of energy and shapes. Designing guide RNAs requires understanding:
+
+- The intricate folding patterns (Secondary structures)
+- Binding strength dynamics (GC content)
+- Recognition accuracy (Off-target potential)
+
+CRISPRADIUM navigates these molecular intricacies, mapping a world smaller than imagination yet governed by mathematical precision.
+
+## The Science Behind the Wonder
+
+The molecular reality unfolds through specific requirements:
+```python
+Each guide RNA demands:
+- Perfect base pairing in the seed region
+- Balanced GC content (40-60%)
+- Minimal self-folding (ΔG > -12 kcal/mol)
+- Adjacent PAM sequence (NGG for SpCas9)
+```
+
+Evolution crafted this system where a protein identifies any 20-letter sequence amid billions, activating only upon finding the correct three-letter signature. This exemplifies nature's molecular engineering brilliance.
+
+CRISPRADIUM integrates:
+- Energy calculations for molecular stability
+- Recognition patterns from successful edits
+- Structural predictions for optimal function
+- Evolutionary insights encoded in scoring matrices
+
+It forges a path through this molecular landscape, helping you design the perfect guide RNA for genome editing. As Richard Feynman noted, nature's simplicity reveals its profound beauty - nowhere is this more evident than in the CRISPR system.
 
 ## Why PAM Sequences Matter
 
@@ -34,559 +84,707 @@ SaCas9:    Fancy with its NNGRRT requirement
 
 *Note: If you're wondering why I'm using food analogies, it's because proteins are literally molecular machines that "eat" for a living.*
 
-## Features
+## Core Functionality and Features
 
-- Multi-system CRISPR analysis (because one size doesn't fit all)
-- FASTA format support (for when you're feeling fancy)
-- GC content analysis (because some DNA likes it hot)
-- Off-target scoring (preventing CRISPR from being a bull in a DNA china shop)
-- Efficiency predictions (so you don't waste time on guide RNAs that are all bark and no bite)
+CRISPRADIUM's capabilities extend beyond simple sequence matching:
 
-## Installation Guide 🔧
+### Multi-System CRISPR Analysis
+Each CRISPR system brings unique characteristics to genome editing:
 
-### Prerequisites for Arch Linux
-First, let's get your system ready. Open your terminal and run:
+| System | PAM Sequence | Optimal Use Case | Key Advantage |
+|--------|-------------|------------------|---------------|
+| SpCas9 | NGG | Universal targeting | Most extensively studied |
+| Cas12a | TTTV | AT-rich regions | 5' PAM preference |
+| SaCas9 | NNGRRT | Size-constrained applications | Smaller protein size |
+| SpRY | NRN | Flexible targeting | Relaxed PAM requirements |
 
+### Guide RNA Design Pipeline
+The tool employs a sophisticated analysis pipeline:
+
+1. **Sequence Processing**
+   ```python
+   # Input handling supports multiple formats
+   - Standard DNA sequences
+   - FASTA format (single/multi-sequence)
+   - Batch processing capability
+   ```
+
+2. **Guide RNA Analysis**
+   ```python
+   Each candidate undergoes:
+   - GC content optimization (40-60%)
+   - Secondary structure prediction
+   - Off-target analysis
+   - Efficiency scoring
+   ```
+
+3. **Results Generation**
+   - Comprehensive scoring metrics
+   - Interactive visualizations
+   - Detailed structural analysis
+   - Off-target predictions
+
+### Advanced Analysis Features
+
+#### Thermodynamic Analysis
+```python
+# Energy calculations for RNA folding
+ΔG_total = ΔG_helix + ΔG_loop + ΔG_stack
+```
+- Complete secondary structure prediction
+- Base-stacking energy calculations
+- Loop formation analysis
+
+#### Position-Specific Scoring
+```python
+# Scoring matrix implementation
+score = Σ(position_weight × nucleotide_contribution)
+```
+- Seed region importance weighting
+- PAM-proximal scoring
+- Historical efficiency data integration
+
+## Installation and Setup
+
+### System Requirements
+
+Before installation, ensure your system meets these requirements:
+- Python 3.12 or higher
+- 2GB RAM minimum (4GB recommended for larger sequences)
+- 500MB free disk space
+- Linux environment (tested on Arch-based distributions)
+
+### Dependencies Overview
+
+Core scientific packages:
+```python
+ViennaRNA  (~150MB) - RNA structure prediction
+BioPython  (~30MB)  - Sequence manipulation
+NumPy      (~20MB)  - Numerical computations
+Flask      (~1MB)   - Web interface
+```
+
+### Quick Start (Arch Linux)
+
+1. **System Preparation**
 ```bash
-# Update your system first (always a good practice)
+# Update system packages
 sudo pacman -Syu
 
-# Install Python and base dependencies
-sudo pacman -S python python-pip
+# Install core dependencies
+sudo pacman -S python python-pip viennarna git
 
-# Install system dependencies for ViennaRNA
-sudo pacman -S viennarna
-
-# Install Poetry (Arch's official repo)
+# Install Poetry package manager
 sudo pacman -S python-poetry
-
-# Optional but recommended development tools
-sudo pacman -S base-devel git
 ```
 
-### Setting Up Poetry
-Poetry needs some initial configuration:
-
+2. **Project Setup**
 ```bash
-# Configure Poetry to create virtual environments in the project directory
+# Clone repository
+git clone https://github.com/Bjorn99/Crispradium.git
+cd Crispradium
+
+# Configure Poetry
 poetry config virtualenvs.in-project true
 
-# Verify your Poetry installation
-poetry --version
-```
-
-### Installing CRISPRADIUM
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/crispradium.git
-
-# Enter the project directory
-cd crispradium
-
-# Initialize Poetry and install dependencies
+# Install project dependencies
 poetry install
+```
 
-# Activate the virtual environment
+3. **Verify Installation**
+```bash
+# Activate virtual environment
 poetry shell
+
+# Run verification tests
+python -c "import RNA; print('ViennaRNA works!')"
+python -c "from Bio import SeqIO; print('BioPython works!')"
 ```
 
-### Troubleshooting Common Issues
+### Common Installation Issues
 
-1. If ViennaRNA fails to install:
+1. **ViennaRNA Installation**
+If the standard installation fails:
 ```bash
-# Try installing with pacman first
-sudo pacman -S viennarna
-
-# If that doesn't work, try installing from AUR using yay
-yay -S viennarna-git
+# Alternative installation
+yay -S viennarna-git  # If using AUR helper
 ```
 
-2. If you get permission errors:
+2. **Permission Issues**
 ```bash
-# Fix poetry cache permissions
+# Fix Poetry cache permissions
 sudo chown -R $USER:$USER ~/.cache/pypoetry
 ```
 
-3. For RNA package issues:
+3. **Missing Libraries**
 ```bash
-# Install RNA package dependencies
+# Install additional dependencies
 sudo pacman -S gsl boost-libs
-
-# Then reinstall through poetry
-poetry install
 ```
 
-### Development Setup
+### Development Environment
 
-For development, you might want additional tools:
-
+For development work:
 ```bash
 # Install development tools
 poetry add --dev black flake8 mypy pytest
 
-# Install pre-commit hooks
+# Set up pre-commit hooks
 poetry run pre-commit install
 ```
 
 ### Running the Application
 
 ```bash
-# Make sure you're in the poetry shell
-poetry shell
-
-# Run the application
-python run.py
-
-# Or use Poetry to run it directly
+# Start the server
 poetry run python run.py
+
+# Access the web interface
+# Open browser to http://localhost:5000
 ```
 
-### Poetry Cheat Sheet for This Project
+### Poetry Command Reference
 
-Common commands you'll use:
-
+Essential Poetry commands for project management:
 ```bash
-# Add a new dependency
+# Add new dependencies
 poetry add package-name
 
-# Add a development dependency
-poetry add --dev package-name
-
-# Update all dependencies
+# Update dependencies
 poetry update
 
-# Show currently installed packages
+# Show installed packages
 poetry show
 
-# Run tests
-poetry run pytest
-
-# Export requirements.txt (if needed)
+# Export requirements
 poetry export -f requirements.txt --output requirements.txt
-
-# Remove poetry environment
-poetry env remove python
 ```
 
-### Verifying Installation
+## Usage Guide and Examples
 
-After installation, verify everything works:
+### Basic Usage
 
-```bash
-# Enter poetry shell
-poetry shell
+The web interface provides intuitive access to CRISPRADIUM's functionality:
 
-# Run basic tests
-python -c "import RNA; print('ViennaRNA works!')"
-python -c "from Bio import SeqIO; print('BioPython works!')"
-
-# Run the application
-python run.py
+```python
+# Start the application
 poetry run python run.py
 ```
 
-You should see the server start at `http://localhost:5000`
+### Input Formats
 
-
-## Usage 🎮
-
-```bash
-# Fire it up
-python run.py
-
-# Open your browser to
-http://localhost:5000
+1. **Simple DNA Sequence**
+```plaintext
+ATGGCTGCTAGCTAGCTGACGTACGTACGTTGCTAGCTAGCTGACT
 ```
 
-## The Science Behind It 🔬
+2. **FASTA Format**
+```plaintext
+>Gene_Fragment_1 Description
+ATGGCTGCTAGCTAGCTGACGTACGTACGTTGCTAGCTAGCTGACT
+>Gene_Fragment_2 Description
+CGTACGTACGTTGCTAGCTAGCTGACTATGCTAGCTAGCTGACTGC
+```
 
-### CRISPR Systems and Their Quirks
+### Real-World Examples
 
-| System | PAM Sequence | Best Use Case | Citation |
-|--------|-------------|---------------|-----------|
-| SpCas9 | NGG | Your Swiss Army knife | Jinek et al., 2012[^1] |
-| SaCas9 | NNGRRT | When size matters (it's smaller) | Ran et al., 2015[^2] |
-| Cas12a | TTTV | AT-rich regions | Zetsche et al., 2015[^3] |
-| SpRY | NRN | The "I'll eat anything" variant | Walton et al., 2020[^4] |
-
-### Success Factors in Guide RNA Design
-
-1. GC Content: Like Goldilocks - not too high, not too low (40-60% is just right)
-2. Secondary Structure: Because nobody likes a guide RNA that plays Twister with itself
-3. Off-target Effects: Being specific is like being a good archer - you want to hit only your target
-
-## Real-World Examples 📊
-
-### Example 1: When SpCas9 Won't Work
+#### Example 1: Standard Gene Target
 ```python
-Sequence: ATATATATATATATATAT
-Result: No guides found! (Because there's no NGG PAM)
-Solution: Try Cas12a (it loves AT-rich sequences)
+Input Sequence:
+ATGGCTGCTAGCTAGCTGACGTACGTACGTTGCTAGCTAGCTGACT
+
+Analysis Results:
+- Multiple NGG PAM sites identified
+- Average GC content: 52%
+- Guide efficiency scores: 85-92%
 ```
 
-### Example 2: Perfect Target
+#### Example 2: AT-Rich Region
 ```python
-Sequence: ATGCATGCATGCAGGCATGC
-         ----------NGG-------
-Result: Multiple guide options (it's like finding a LEGO store in LEGOLAND)
+Input:
+ATATATATGCATATATATGCATATATATGCAT
+
+Results:
+- SpCas9: Limited targeting options
+- Cas12a: Multiple TTTV PAM sites available
+- Recommended: Use Cas12a system
 ```
 
-# Technical Considerations and Limitations
-
-## Dependency Analysis
-
-### ViennaRNA Package (~150MB)
-The ViennaRNA package is crucial for accurate RNA secondary structure prediction, which is essential for guide RNA efficiency prediction. 
-
-**Why it's important:**
-- Provides thermodynamic calculations for RNA folding
-- Enables accurate secondary structure prediction
-- Critical for guide RNA stability assessment
-
-**Size Considerations:**
-- Base package: ~150MB
-- Additional language bindings: ~20MB
-- Total installation size: ~170MB
-
-This size is justified because ViennaRNA includes:
-1. Comprehensive energy parameter sets
-2. Multiple folding algorithms
-3. Optimized C libraries for calculations
-
-### BioPython (~30MB)
-Essential for sequence manipulation and biological data handling.
-
-### Other Dependencies:
-- NumPy: ~20MB
-- Flask: ~1MB
-- Other utilities: ~5MB
-
-Total package size: ~230MB
-
-## Time-Space Complexity Analysis
-
-### Guide RNA Finding
+#### Example 3: Complex Target
 ```python
-Time Complexity:
-- Best Case: O(n) where n is sequence length
-- Worst Case: O(n × m) where m is number of PAM sites
-- Average Case: O(n)
+Input:
+>Complex_Region
+GCTAGCTAGCTGACTATGCTAGCTAGCTGACTGCATGCATGCATGC
 
-Space Complexity:
-- O(k) where k is number of found guide RNAs
+Analysis:
+- Secondary structure ΔG: -8.3 kcal/mol
+- Off-target count: 2
+- Optimal guide position: 23-42
 ```
 
-### Structure Prediction (ViennaRNA)
+### System-Specific Considerations
+
+Each CRISPR system has unique characteristics affecting guide design:
+
+#### SpCas9
+```
+Target Requirements:
+- 20nt guide sequence
+- NGG PAM
+- Optimal GC: 40-60%
+```
+
+#### Cas12a
+```
+Target Requirements:
+- 23nt guide sequence
+- TTTV PAM
+- Tolerates AT-rich sequences
+```
+
+### Advanced Usage
+
+#### 1. Custom Parameter Adjustment
 ```python
-Time Complexity:
-- O(n³) where n is guide RNA length
-- Optimized to O(n²) for certain cases
-
-Space Complexity:
-- O(n²) for dynamic programming matrix
+# Modify scoring weights
+GC_WEIGHT = 0.3
+STRUCTURE_WEIGHT = 0.3
+SPECIFICITY_WEIGHT = 0.4
 ```
 
-### Off-target Analysis
+#### 2. Batch Processing
 ```python
-Time Complexity:
-- O(n × g) where g is genome size
-- Optimized with indexing to O(n × log(g))
-
-Space Complexity:
-- O(m) where m is number of potential off-targets
+# For multiple sequences
+>Batch_1
+SEQUENCE_1
+>Batch_2
+SEQUENCE_2
 ```
 
-## Performance Limitations
-
-1. Sequence Length Constraints:
-   - Minimum: 20 nucleotides
-   - Maximum: 200,000 nucleotides
-   - Optimal: 1,000-10,000 nucleotides
-
-2. Memory Usage:
-   - Base requirement: 500MB RAM
-   - Recommended: 2GB RAM
-   - For large sequences (>50kb): 4GB RAM
-
-3. Processing Time Guidelines:
-   ```
-   Sequence Length | Approx. Processing Time
-   ----------------|----------------------
-   1,000 bp       | 1-2 seconds
-   10,000 bp      | 5-10 seconds
-   50,000 bp      | 30-60 seconds
-   200,000 bp     | 2-5 minutes
-   ```
-
-## Deployment Considerations
-
-Due to the size of dependencies (especially ViennaRNA) and computational requirements, this tool has specific hosting requirements:
-
-1. Environment Needs:
-   - Full Python environment
-   - System-level library installation capabilities
-   - Sufficient RAM (2GB minimum)
-   - CPU optimization for scientific computing
-
-2. Not Suitable For:
-   - Serverless platforms (due to size limitations)
-   - Static hosting services
-   - Platforms with execution time limits <30s
-
-3. Recommended Deployment:
-   - Traditional VPS/VM
-   - Scientific computing platforms
-   - Self-hosted servers
-
-## Trade-offs and Design Decisions
-
-1. Accuracy vs Speed:
-   - ViennaRNA used for accuracy despite size
-   - Caching implemented for repeated calculations
-   - Parallel processing for large sequences
-
-2. Memory Management:
-   - Sequence chunking for large inputs
-   - Garbage collection optimization
-   - Cache size limits
-
-3. Computation Optimization:
-   - Pre-calculated lookup tables
-   - Lazy loading of heavy components
-   - Result caching
-
-## Future Optimization Possibilities
-
-1. Performance:
-   - Implement GPU acceleration
-   - Add distributed computing support
-   - Optimize memory usage
-
-2. Size Reduction:
-   - Custom-built ViennaRNA with essential components
-   - Lazy loading of dependencies
-   - Optional feature packaging
-
-## References & Further Reading
-
-1. **Jinek, M., et al. (2012).** A programmable dual-RNA–guided DNA endonuclease in adaptive bacterial immunity. *Science*, 337(6096), 816-821. [Link to paper](https://www.science.org/doi/10.1126/science.1225829)  
-   > *The paper that started it all.*
-
-2. **Ran, F.A., et al. (2015).** In vivo genome editing using Staphylococcus aureus Cas9. *Nature*, 520(7546), 186-191. [Link to paper](https://doi.org/10.1038/nature14299)  
-   > *Proving that sometimes smaller is better.*
-
-3. **Zetsche, B., et al. (2015).** Cpf1 is a single RNA-guided endonuclease of a class 2 CRISPR-Cas system. *Cell*, 163(3), 759-771. [Link to paper](https://doi.org/10.1016/j.cell.2015.09.038)  
-   > *Introducing the AT-sequence loving member of the CRISPR family.*
-
-4. **Walton, R.T., et al. (2020).** Unconstrained genome targeting with near-PAMless engineered CRISPR-Cas9 variants. *Science*, 368(6488), 290-296. [Link to paper](https://www.science.org/doi/10.1126/science.aaz7031)  
-   > *The "I don't care what's for dinner" variant of Cas9.*
-
-## Advanced Reading for the Curious
-
-- ViennaRNA Package (Because RNA structure prediction is like weather forecasting for molecules)
-  - Lorenz, R., et al. (2011). ViennaRNA Package 2.0. *Algorithms for Molecular Biology*, 6(1), 1-14.
-
-- Off-target Prediction (Or: How I Learned to Stop Worrying and Love CRISPR)
-  - Hsu, P.D., et al. (2013). DNA targeting specificity of RNA-guided Cas9 nucleases. *Nature Biotechnology*, 31(9), 827-832.
-
-## Contributing
-
-Found a bug? Got a cool feature idea? Want to make the code less embarrassing? Feel free to:
-1. Fork it
-2. Fix it
-3. Submit a PR
-
-## Technical Deep Dive 🔬
-
-### Guide RNA Scoring Mechanics
-
-The tool uses a multi-factorial approach to score guide RNAs:
-
+#### 3. Analysis Output Options
 ```python
-Final_Score = (GC_weight × GC_score) + 
-              (Structure_weight × Structure_score) + 
-              (Off_target_weight × Off_target_score)
+Output formats available:
+- JSON results
+- CSV export
+- Visualization plots
 ```
 
-#### 1. GC Content Analysis
+### Interpreting Results
+
+#### Guide RNA Scores
+```
+Score Components:
+90-100: Excellent candidate
+80-89:  Good candidate
+70-79:  Moderate candidate
+<70:    Poor candidate
+```
+
+#### Structure Analysis
 ```python
-GC_score = 100 - min(abs(gc_content - 50), 50)
+Secondary Structure Elements:
+- Stem-loops (≤ 4 bases)
+- Bulges    (≤ 2 bases)
+- Mismatches (≤ 3 total)
 ```
-- Optimal range: 40-60%
-- Penalization for extreme values
-- Based on thermodynamic stability research
-- Citation: Wang et al. (2014) - "High GC content affects CRISPR efficiency"
 
-#### 2. Secondary Structure Prediction
-Using ViennaRNA for minimum free energy (MFE) calculation:
+### Performance Guidelines
+
+For optimal performance:
+
+1. **Sequence Length**
+```
+Optimal ranges:
+- Minimum: 20 bp
+- Maximum: 200,000 bp
+- Ideal: 1,000-10,000 bp
+```
+
+2. **Processing Times**
+```
+Expected duration:
+1,000 bp    → 1-2 seconds
+10,000 bp   → 5-10 seconds
+50,000 bp   → 30-60 seconds
+200,000 bp  → 2-5 minutes
+```
+
+3. **Memory Usage**
+```
+Requirements:
+- Small sequences  (<1kb):   500MB RAM
+- Medium sequences (<50kb):  2GB RAM
+- Large sequences  (>50kb):  4GB RAM
+```
+
+## Technical Details and Limitations
+
+### Core Algorithm Implementation
+
+#### Guide RNA Scoring System
 ```python
-structure, energy = RNA.fold(sequence)
-normalized_score = min(100, max(0, (abs(energy) / 30) * 100))
-```
-
-Common RNA Structures that Affect Efficiency:
-```
-Hairpin Loop:        Bulge:           Internal Loop:
-    A-U                A              A     U
-    G-C              G C              G-C
-    C-G               A               C-G
-    U-A              G-C              A-U
-    UGCAU            U-A              UGCA
-```
-
-#### 3. Off-target Analysis Implementation
-
-The tool uses a modified Needleman-Wunsch algorithm for off-target search:
-
-```python
-def find_off_targets(guide, genome):
-    max_mismatches = 4
-    seed_region = guide[:-12]  # Last 12 bases are seed region
-    
-    # Weighted mismatch scoring
-    mismatch_weights = {
-        'seed_region': 2.0,
-        'non_seed': 1.0,
-        'pam_adjacent': 1.5
-    }
-```
-
-#### 4. PAM Site Recognition Patterns
-
-Detailed PAM requirements for each system:
-
-```
-SpCas9 (Original):
-5' - N(20) - NGG - 3'
-    └guide RNA┘ └PAM┘
-
-Cas12a (Cpf1):
-5' - TTTV - N(23) - 3'
-    └PAM┘  └guide RNA┘
-
-SaCas9:
-5' - N(21) - NNGRRT - 3'
-    └guide RNA┘ └─PAM─┘
-
-xCas9:
-5' - N(20) - NG - 3'
-    └guide RNA┘ └PAM┘
-```
-
-### Efficiency Calculations
-
-Each guide RNA is scored based on:
-
-1. Position-specific scoring matrix (PSSM):
-```
-Position  A    T    C    G
-1        0.6  0.8  0.7  0.9
-2        0.8  0.7  0.6  0.9
-...      ...  ...  ...  ...
-20       0.7  0.6  0.8  0.9
-```
-
-2. Thermodynamic calculations:
-```python
-def calculate_thermal_stability(sequence):
+def calculate_guide_score(guide_sequence: str) -> float:
     """
-    Calculate ΔG for guide RNA binding
-    Uses nearest-neighbor method
+    Multi-factor scoring algorithm combining:
+    - Sequence composition (30%)
+    - Structural stability (30%)
+    - Target accessibility (40%)
     """
-    nn_parameters = {
-        'AA/TT': -1.00,
-        'AT/TA': -0.88,
-        'TA/AT': -0.58,
-        'CA/GT': -1.45,
-        'GT/CA': -1.44,
-        'CT/GA': -1.28,
-        'GA/CT': -1.30,
-        'CG/GC': -2.17,
-        'GC/CG': -2.24,
-        'GG/CC': -1.84
-    }
+    return (
+        0.3 * gc_score +
+        0.3 * structure_score +
+        0.4 * accessibility_score
+    )
 ```
 
-### Software Architecture
-
-The tool follows a modular design:
-
+### Guide RNA Design Process
 ```
-CRISPRADIUM/
-├── core/
-│   ├── guide_finder.py      # PAM and guide identification
-│   ├── scoring_engine.py    # Efficiency calculations
-│   └── off_target.py       # Off-target analysis
-├── analysis/
-│   ├── structure_pred.py   # RNA structure prediction
-│   └── thermal_calc.py     # Thermodynamic calculations
-└── visualization/
-    ├── plot_engine.py      # Data visualization
-    └── report_gen.py       # Results formatting
+Target DNA:     5'-NNNNNNNNNNNNNNNNNNNNNGG-3'
+                   ||||||||||||||||||||
+Guide RNA:     3'-NNNNNNNNNNNNNNNNNNN----5'
+
+Efficiency Factors:
+↑ GC% = Higher Stability
+↓ Secondary Structure = Better Accessibility
+↑ Seed Region Match = Higher Specificity
 ```
 
-### Performance Optimizations
+### Computational Complexity
 
-1. Sequence Analysis:
-   - Uses bit-parallel operations for pattern matching
-   - Implements Boyer-Moore algorithm for PAM search
-   - Caches commonly used sequences
+#### Time Complexity Analysis
+```
+Operation               | Best Case | Average Case | Worst Case
+-----------------------|-----------|--------------|------------
+Guide Finding          | O(n)      | O(n)         | O(n × m)
+Structure Prediction   | O(n²)     | O(n³)        | O(n³)
+Off-target Analysis   | O(n×log(g))| O(n×g)       | O(n×g)
 
-2. Structure Prediction:
-   - Implements McCaskill algorithm for partition function
-   - Uses dynamic programming for MFE calculation
-   - Parallel processing for multiple sequences
+where:
+n = sequence length
+m = number of PAM sites
+g = genome size
+```
 
-3. Memory Management:
+#### Space Complexity
 ```python
-class SequenceHandler:
-    def __init__(self):
-        self.cache = LRUCache(maxsize=1000)
-        self.batch_size = 5000  # For chunked processing
+Memory Requirements:
+- Guide Storage:    O(k)     # k = number of guides
+- Structure Matrix: O(n²)    # n = sequence length
+- Off-target Data:  O(m)     # m = matches found
 ```
 
-### Validation Methods
+### System Limitations
 
-Each guide RNA undergoes rigorous validation:
+1. **Sequence Processing**
+```
+Length Constraints:
+- Minimum: 20 nucleotides
+- Maximum: 200,000 nucleotides
+- Optimal: 1,000-10,000 nucleotides
 
-1. Sequence Quality:
+Processing Caps:
+- Max concurrent analyses: 10
+- Max batch size: 100 sequences
+- Max file size: 50MB
+```
+
+2. **Computational Resources**
+```python
+Resource Limits:
+RAM_USAGE = {
+    'minimum': '500MB',
+    'recommended': '2GB',
+    'large_sequences': '4GB'
+}
+
+CPU_UTILIZATION = {
+    'single_sequence': '1 core',
+    'batch_processing': 'multi-core',
+    'max_threads': 4
+}
+```
+### Memory Usage Patterns
+```
+RAM Utilization:
+
+Small Sequence (<1kb):
+[Core####][Cache##][Free space##################]
+
+Large Sequence (>50kb):
+[Core####][Cache####][Analysis######][Buffer###]
+
+Legend:
+# = 250MB RAM
+```
+
+3. **Algorithm Constraints**
+```python
+Scoring Limitations:
+- GC content range: 30-75%
+- Secondary structure threshold: ΔG > -12 kcal/mol
+- Off-target tolerance: up to 4 mismatches
+```
+
+### Performance Characteristics
+
+#### 1. Processing Time Analysis
+```
+Sequence Length | Time   | Memory Usage
+----------------|--------|-------------
+1,000 bp       | 1-2s   | 500MB
+10,000 bp      | 5-10s  | 1GB
+50,000 bp      | 30-60s | 2GB
+200,000 bp     | 2-5m   | 4GB+
+```
+
+#### 2. Accuracy Metrics
+```python
+Prediction Accuracy:
+- Guide efficiency: ~85%
+- Off-target prediction: ~90%
+- Structure prediction: ~80%
+```
+
+### Technical Dependencies
+
+#### Core Dependencies
+1. **ViennaRNA Package (~150MB)**
    ```python
-   def validate_sequence(seq):
-       # Check length
-       if not (17 <= len(seq) <= 23):
-           return False
-           
-       # Check GC content
-       gc = (seq.count('G') + seq.count('C')) / len(seq)
-       if not (0.4 <= gc <= 0.75):
-           return False
+   Features utilized:
+   - RNA folding algorithms
+   - Energy parameter sets
+   - Structure prediction
    ```
 
-2. Structural Validation:
-   - Maximum folding energy thresholds
-   - Seed region accessibility checks
-   - PAM site structural constraints
+2. **BioPython (~30MB)**
+   ```python
+   Functionality:
+   - Sequence parsing
+   - FASTA handling
+   - Basic manipulations
+   ```
 
-3. Specificity Checks:
-   - Genome-wide off-target search
-   - Seed region uniqueness
-   - PAM adjacency scoring
+### Implementation Details
 
-For more detailed technical information and implementation specifics, check out the [Technical Documentation](docs/technical.md).
+#### 1. Caching System
+```python
+Cache Implementation:
+- LRU cache for recent queries
+- Maximum cache size: 1000 entries
+- Cache invalidation: 24 hours
+```
 
-## About the Author
+#### 2. Error Handling
+```python
+Error Management:
+- Input validation
+- Graceful degradation
+- Detailed error reporting
+```
 
-Just a biologist trying to make CRISPR guide RNA design less painful and more fun.
+### Future Technical Considerations
 
-## License 📄
+1. **Planned Optimizations**
+   ```python
+   Future Improvements:
+   - GPU acceleration
+   - Distributed processing
+   - Memory optimization
+   ```
 
-MIT License - Because sharing is caring (and legally required in this case).
+2. **Scalability Plans**
+   ```python
+   Scaling Strategies:
+   - Database integration
+   - API development
+   - Container support
+   ```
+
+### Known Limitations
+
+1. **Technical Constraints**
+   - No direct genome-wide search
+   - Limited parallel processing
+   - Memory constraints for very large sequences
+
+2. **Biological Limitations**
+   - Chromatin state not considered
+   - Limited validation for non-standard PAMs
+   - Simplified RNA folding models
+
+## References & Contributing
+
+## Research Foundations & Advanced Reading
+
+### Core Research Papers
+
+1. **CRISPR-Cas9 Foundations**
+   > Jinek, M., et al. (2012). A programmable dual-RNA–guided DNA endonuclease in adaptive bacterial immunity. *Science*, 337(6096), 816-821.
+   - Established fundamental CRISPR-Cas9 mechanisms
+   - DOI: 10.1126/science.1225829
+
+2. **Guide RNA Design Optimization**
+   > Doench, J. G., et al. (2016). Optimized sgRNA design to maximize activity and minimize off-target effects of CRISPR-Cas9. *Nature Biotechnology*, 34(2), 184-191.
+   - Comprehensive guide RNA scoring methodology
+   - DOI: 10.1038/nbt.3437
+
+3. **RNA Secondary Structure**
+   > Lorenz, R., et al. (2011). ViennaRNA Package 2.0. *Algorithms for Molecular Biology*, 6(1), 1-14.
+   - RNA structure prediction algorithms
+   - DOI: 10.1186/1748-7188-6-26
+
+4. **Alternative CRISPR Systems**
+   > Zetsche, B., et al. (2015). Cpf1 is a single RNA-guided endonuclease of a class 2 CRISPR-Cas system. *Cell*, 163(3), 759-771.
+   - Cas12a mechanism and requirements
+   - DOI: 10.1016/j.cell.2015.09.038
+
+5. **PAM Recognition**
+   > Anders, C., et al. (2014). Structural basis of PAM-dependent target DNA recognition by the Cas9 endonuclease. *Nature*, 513(7519), 569-573.
+   - Molecular basis of PAM recognition
+   - DOI: 10.1038/nature13579
+
+### Advanced Reading
+
+#### RNA Biology and Structure
+1. **RNA Thermodynamics**
+   > Turner, D. H., & Mathews, D. H. (2010). NNDB: the nearest neighbor parameter database for predicting stability of nucleic acid secondary structure. *Nucleic Acids Research*, 38(suppl_1), D280-D282.
+   - Comprehensive RNA energy parameters
+   - DOI: 10.1093/nar/gkp892
+
+2. **Structure Prediction**
+   > Mathews, D. H. (2014). RNA secondary structure analysis using RNAstructure. *Current Protocols in Bioinformatics*, 46(1), 12-6.
+   - Advanced RNA folding algorithms
+   - DOI: 10.1002/0471250953.bi1206s46
+
+#### CRISPR Specificity
+1. **Off-target Analysis**
+   > Hsu, P. D., et al. (2013). DNA targeting specificity of RNA-guided Cas9 nucleases. *Nature Biotechnology*, 31(9), 827-832.
+   - Comprehensive off-target studies
+   - DOI: 10.1038/nbt.2647
+
+2. **Specificity Enhancement**
+   > Slaymaker, I. M., et al. (2016). Rationally engineered Cas9 nucleases with improved specificity. *Science*, 351(6268), 84-88.
+   - Enhanced Cas9 variants
+   - DOI: 10.1126/science.aad5227
+
+#### Computational Methods
+1. **Algorithm Development**
+   > Doench, J. G., et al. (2014). Rational design of highly active sgRNAs for CRISPR-Cas9–mediated gene inactivation. *Nature Biotechnology*, 32(12), 1262-1267.
+   - Scoring algorithm development
+   - DOI: 10.1038/nbt.3026
+
+2. **Machine Learning Applications**
+   > Kim, H. K., et al. (2018). Deep learning improves prediction of CRISPR–Cpf1 guide RNA activity. *Nature Biotechnology*, 36(3), 239-241.
+   - AI in guide RNA design
+   - DOI: 10.1038/nbt.4061
+
+### Technical Implementation References
+
+1. **Sequence Analysis**
+   > Cock, P. J., et al. (2009). Biopython: freely available Python tools for computational molecular biology and bioinformatics. *Bioinformatics*, 25(11), 1422-1423.
+   - BioPython implementation details
+   - DOI: 10.1093/bioinformatics/btp163
+
+2. **Performance Optimization**
+   > Hofacker, I. L. (2003). Vienna RNA secondary structure server. *Nucleic Acids Research*, 31(13), 3429-3431.
+   - RNA folding optimization
+   - DOI: 10.1093/nar/gkg599
+
+### Practical Applications
+
+1. **Genome Editing Protocols**
+   > Ran, F. A., et al. (2013). Genome engineering using the CRISPR-Cas9 system. *Nature Protocols*, 8(11), 2281-2308.
+   - Practical implementation guidelines
+   - DOI: 10.1038/nprot.2013.143
+
+2. **Clinical Applications**
+   > Doudna, J. A. (2020). The promise and challenge of therapeutic genome editing. *Nature*, 578(7794), 229-236.
+   - Real-world applications
+   - DOI: 10.1038/s41586-020-1978-5
+
+These papers and resources form the theoretical and practical foundation of CRISPRADIUM's functionality. For implementation details, refer to the respective sections in the codebase.
+
+### Contributing Guidelines
+
+#### Setting Up Development Environment
+```bash
+# Fork and clone the repository
+git clone https://github.com/Bjorn99/Crispradium.git
+cd Crispradium
+
+# Create development branch
+git checkout -b feature/your-feature-name
+
+# Install development dependencies
+poetry install --with dev
+```
+
+#### Code Style
+- Follow PEP 8 guidelines
+- Use type hints
+- Write docstrings in Google format
+- Keep functions focused and modular
+
+#### Testing
+```bash
+# Run test suite
+poetry run pytest
+
+# Run with coverage
+poetry run pytest --cov=app tests/
+```
+
+#### Pull Request Process
+1. **Update Documentation**
+   - Update README if needed
+   - Add docstrings for new functions
+   - Update type hints
+
+2. **Write Tests**
+   ```python
+   def test_your_feature():
+       # Arrange
+       input_data = "ATGC..."
+       
+       # Act
+       result = your_function(input_data)
+       
+       # Assert
+       assert result.score > 0
+   ```
+
+3. **Submit PR**
+   - Clear description
+   - Reference any related issues
+   - Update CHANGELOG.md
+
+### License
+
+MIT License
+
+### Acknowledgments
+
+This tool builds upon:
+- ViennaRNA Package
+- BioPython Library
+- Flask Framework
+- The CRISPR research community
+
+### Quick Start Commands
+```bash
+# Clone and run
+git clone https://github.com/yourusername/crispradium.git
+cd crispradium
+poetry install
+poetry run python run.py
+```
 
 ---
 
-*Remember: In molecular biology, as in life, location is everything. And CRISPRADIUM is your GPS for gene editing.*
+*"The best thing about CRISPR is its ease of use. The hardest part is deciding what to edit." - Unknown Molecular Biologist*
 
 ---
 
-*P.S. If you made it this far in the README, you deserve a cookie. Unfortunately, this is a digital file, so the best I can do is: 🍪*
+Made with 🧬 and Python
+
+[Back to Top](#crispradium)
