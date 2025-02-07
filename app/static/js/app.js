@@ -1,6 +1,8 @@
 // Global variables for charts and data
 let guideChart = null;
 let currentResults = null;
+let currentChartType = 'scatter';
+let currentData = null
 
 // FASTA handling utils
 const FASTA_UTILS = {
