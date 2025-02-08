@@ -760,7 +760,8 @@ poetry run pytest --cov=app tests/
 
 ### License
 
-```GNU AFFERO GENERAL PUBLIC LICENSE
+```
+GNU AFFERO GENERAL PUBLIC LICENSE
 ```
 
 ### Acknowledgments
